@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ 
+ Copyright 2014-2014 The Kuali Foundation
+ 
+ Licensed under the Educational Community License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl2.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ 
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.kuali.pom</groupId>
+        <artifactId>kuali-common</artifactId>
+        <version>4.3.5</version>
+    </parent>
+    <groupId>org.kuali.coeus</groupId>
+    <artifactId>coeus-doc-access-conv</artifactId>
+    <version>6.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <description>
+        The Kuali Coeus Document Access Conversion module is a program to aid in the conversion of document level access from kuali kim managed to kuali coeus managed.
+    </description>
+    <url>http://${kuali.site.hostname}/coeus/coeus-doc-access-conv/${project.version}</url>
+    <inceptionYear>2014</inceptionYear>
+    <scm>
+        <connection>scm:git:https://github.com/kuali/coeus-doc-access-conv.git</connection>
+        <developerConnection>scm:git:https://github.com/kuali/coeus-doc-access-conv.git</developerConnection>
+        <url>https://github.com/kuali/coeus-doc-access-conv/tree/${project.scm.tag}</url>
+        <tag>master</tag>
+    </scm>
+    <developers>
+        <developer>
+            <id>kc.dev</id>
+            <name>Kuali Coeus Developers</name>
+            <organization>Kuali</organization>
+            <timezone>-7</timezone>
+            <email>kc.dev@kuali.org</email>
+        </developer>
+    </developers>
+    
+    <prerequisites>
+        <maven>${require.maven.version}</maven>
+    </prerequisites>
+
+    <properties>
+        <project.scm.vendor>git</project.scm.vendor>
+        
+        <require.maven.version>3.0</require.maven.version>
+        
+        <junit.version>4.11</junit.version>
+        <error_prone_core.version>1.1.2</error_prone_core.version>
+        <plexus-compiler-javac.version>2.3</plexus-compiler-javac.version>
+        <plexus-compiler-javac-errorprone.version>2.3</plexus-compiler-javac-errorprone.version>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+    </dependencies>
+    
+    <profiles>
+        <!-- enables the error prone compiler for strict compilation-->
+        <profile>
+            <id>error-prone</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>${plugin.compiler.version}</version>
+                            <configuration>
+                                <source>${project.compile.source}</source>
+                                <target>${project.compile.target}</target>
+                                <encoding>${project.encoding}</encoding>
+                                <useIncrementalCompilation>false</useIncrementalCompilation>
+                                <compilerId>javac-with-errorprone</compilerId>
+                                <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>com.google.errorprone</groupId>
+                                    <artifactId>error_prone_core</artifactId>
+                                    <version>${error_prone_core.version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.codehaus.plexus</groupId>
+                                    <artifactId>plexus-compiler-javac</artifactId>
+                                    <version>${plexus-compiler-javac.version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.codehaus.plexus</groupId>
+                                    <artifactId>plexus-compiler-javac-errorprone</artifactId>
+                                    <version>${plexus-compiler-javac-errorprone.version}</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+</project>
