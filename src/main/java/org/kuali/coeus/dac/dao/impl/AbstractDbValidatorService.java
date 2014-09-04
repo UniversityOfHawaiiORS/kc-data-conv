@@ -1,17 +1,20 @@
 package org.kuali.coeus.dac.dao.impl;
 
+import org.kuali.coeus.dac.dao.ConnectionService;
 import org.kuali.coeus.dac.dao.DbValidatorService;
 
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class AbstractDbValidator implements DbValidatorService {
+public abstract class AbstractDbValidatorService implements DbValidatorService {
 
-    private static final Logger LOG = Logger.getLogger(AbstractDbValidator.class.getName());
+    private static final Logger LOG = Logger.getLogger(AbstractDbValidatorService.class.getName());
 
     private String riceConnection;
     private String coeusConnection;
+
+    private ConnectionService connectionService;
 
     @Override
     public boolean isValidRiceConnection() {
@@ -24,13 +27,8 @@ public abstract class AbstractDbValidator implements DbValidatorService {
     }
 
     protected boolean isValidConnection(String connection) {
-        try {
-            Class.forName(getDriverClassName()).newInstance();
-        } catch (InstantiationException|IllegalAccessException|ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
-        try (Connection conn = DriverManager.getConnection(connection);
+        try (Connection conn = connectionService.getConnection(connection);
              PreparedStatement stmt = conn.prepareStatement(getValidationQuery());
              ResultSet rs = stmt.executeQuery()) {
             return true;
@@ -56,6 +54,13 @@ public abstract class AbstractDbValidator implements DbValidatorService {
         this.coeusConnection = coeusConnection;
     }
 
+    public ConnectionService getConnectionService() {
+        return connectionService;
+    }
+
+    public void setConnectionService(ConnectionService connectionService) {
+        this.connectionService = connectionService;
+    }
+
     public abstract String getValidationQuery();
-    public abstract String getDriverClassName();
 }

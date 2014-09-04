@@ -45,7 +45,7 @@ public final class Main {
         if (options.containsValidate()) {
             CliOptionsBasedDaoFactory factory = new CliOptionsBasedDaoFactory();
             factory.setCliOptions(options);
-            DbValidatorService validator = factory.getDbValidator();
+            DbValidatorService validator = factory.getDbValidatorService();
 
             if (validator.isValidCoeusConnection()) {
                 System.out.println("COEUS SUCCESS: " + options.getCoeusConnectionString());
