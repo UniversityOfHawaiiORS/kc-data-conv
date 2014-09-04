@@ -56,11 +56,14 @@
         <project.scm.vendor>git</project.scm.vendor>
         
         <require.maven.version>3.0</require.maven.version>
-        
-        <commons-cli.version>1.2</commons-cli.version>
-        <junit.version>4.11</junit.version>
-        <log4j.version>2.0.2</log4j.version>
-        <slf4j.version>1.7.7</slf4j.version>
+
+        <mysql.groupId>mysql</mysql.groupId>
+        <mysql.artifactId>mysql-connector-java</mysql.artifactId>
+        <mysql.version>5.1.31</mysql.version>
+
+        <oracle.groupId>com.oracle</oracle.groupId>
+        <oracle.artifactId>ojdbc6</oracle.artifactId>
+        <oracle.version>10.2.0.3.0</oracle.version>
 
         <error_prone_core.version>1.1.2</error_prone_core.version>
         <plexus-compiler-javac.version>2.3</plexus-compiler-javac.version>
@@ -69,36 +72,23 @@
     
     <dependencies>
 
+        <!--
+             this program specifies no external dependencies other than db drivers to make execution of this
+             program as simple as possible
+        -->
+
         <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>${commons-cli.version}</version>
+            <groupId>${mysql.groupId}</groupId>
+            <artifactId>${mysql.artifactId}</artifactId>
+            <version>${mysql.version}</version>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>${oracle.groupId}</groupId>
+            <artifactId>${oracle.artifactId}</artifactId>
+            <version>${oracle.version}</version>
+            <!--<scope>provided</scope>-->
         </dependency>
     </dependencies>
     
