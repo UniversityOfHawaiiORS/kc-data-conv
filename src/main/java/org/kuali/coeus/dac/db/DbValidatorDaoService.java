@@ -1,6 +1,6 @@
-package org.kuali.coeus.dac.dao;
+package org.kuali.coeus.dac.db;
 
-public interface DbValidatorService {
+public interface DbValidatorDaoService {
     boolean isValidRiceConnection();
     boolean isValidCoeusConnection();
 }

@@ -18,6 +18,18 @@ public class CliOptions {
             return true;
         }
 
+        if (valid && (containsProposal() && !"".equals(getCoeusConnectionString()) && !"".equals(getRiceConnectionString()))) {
+            return true;
+        }
+
+        if (valid && (containsIrb() && !"".equals(getCoeusConnectionString()) && !"".equals(getRiceConnectionString()))) {
+            return true;
+        }
+
+        if (valid && (containsIacuc() && !"".equals(getCoeusConnectionString()) && !"".equals(getRiceConnectionString()))) {
+            return true;
+        }
+
         return false;
     }
 
@@ -33,8 +45,24 @@ public class CliOptions {
         return contains("-debug");
     }
 
+    public boolean containsDryRun() {
+        return contains("-dryrun");
+    }
+
     public boolean containsValidate() {
         return contains("-validate");
+    }
+
+    public boolean containsProposal() {
+        return contains("proposal");
+    }
+
+    public boolean containsIrb() {
+        return contains("irb");
+    }
+
+    public boolean containsIacuc() {
+        return contains("iacuc");
     }
 
     private boolean contains(String name) {
@@ -112,47 +140,8 @@ public class CliOptions {
                 + "\n"
                 + "If platform is not specified then the platform will be autodetected from the connection strings.\n"
                 + "\n"
-                + "The valid conversion targets are (proposal|irb|iacuc)";
+                + "The valid conversion targets are (proposal|irb|iacuc)\n"
+                + "\n"
+                + "The dryrun flag may still cause database sequences to increment";
     }
-
-    /*
-    private static final Options cliOptions;
-
-    public static final String OPTION_HELP = "help";
-    public static final String OPTION_VERSION = "version";
-    public static final String OPTION_DRYRUN = "dryrun";
-    public static final String OPTION_DEBUG = "debug";
-    public static final String OPTION_DBPLATFORM = "dbplatform";
-    public static final String OPTION_DB_RICE_CON = "dbricecon";
-    public static final String OPTION_DB_COEUS_CON = "dbcoeuscon";
-
-    static {
-        Option help = new Option(OPTION_HELP, "print this message");
-        Option version = new Option(OPTION_VERSION, "print the version information and exit");
-        Option dryRun = new Option(OPTION_DRYRUN, "Executes conversion without writing out to the database");
-        Option debug = new Option(OPTION_DEBUG, "print debugging information");
-
-        Option dbplatform = new Option(OPTION_DBPLATFORM, "The database platform (MySql|Oracle)");
-        Option dbricecon = OptionBuilder.hasArgs(1)
-                .isRequired(true)
-                .withDescription("The kuali rice jdbc database connection string (jdbc:mysql://localhost/rice?user=usr&password=pwd)")
-                .create(OPTION_DB_RICE_CON);
-        Option dbcoeuscon = OptionBuilder.hasArgs(1)
-                .isRequired(true)
-                .withDescription("The kuali coeus jdbc database connection string (jdbc:mysql://localhost/coeus?user=usr&password=pwd)")
-                .create(OPTION_DB_COEUS_CON);
-
-        cliOptions = new Options();
-        cliOptions.addOption(help);
-        cliOptions.addOption(version);
-        cliOptions.addOption(dryRun);
-        cliOptions.addOption(debug);
-        cliOptions.addOption(dbplatform);
-        cliOptions.addOption(dbricecon);
-        cliOptions.addOption(dbcoeuscon);
-    }
-
-    public static Options getCliOptions() {
-        return cliOptions;
-    }*/
 }

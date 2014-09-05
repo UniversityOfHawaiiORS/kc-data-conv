@@ -1,13 +1,15 @@
 package org.kuali.coeus.dac;
 
 
-import org.kuali.coeus.dac.dao.CliOptionsBasedDaoFactory;
-import org.kuali.coeus.dac.dao.DbValidatorService;
+import org.kuali.coeus.dac.db.DbValidatorDaoService;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -42,10 +44,11 @@ public final class Main {
             return;
         }
 
+        CliOptionsBasedDaoFactory factory = new CliOptionsBasedDaoFactory();
+        factory.setCliOptions(options);
+
         if (options.containsValidate()) {
-            CliOptionsBasedDaoFactory factory = new CliOptionsBasedDaoFactory();
-            factory.setCliOptions(options);
-            DbValidatorService validator = factory.getDbValidatorService();
+            DbValidatorDaoService validator = factory.getDbValidatorDaoService();
 
             if (validator.isValidCoeusConnection()) {
                 System.out.println("COEUS SUCCESS: " + options.getCoeusConnectionString());
@@ -58,6 +61,35 @@ public final class Main {
             } else {
                 System.out.println("RICE FAILED: " + options.getRiceConnectionString());
             }
+            return;
+        }
+
+
+        try (Connection coeusConnection = factory.getConnectionDaoService().getCoeusConnection();
+            Connection riceConnection = factory.getConnectionDaoService().getRiceConnection()) {
+
+            if (options.containsProposal()) {
+                Collection<String> roleIds = factory.getProposalRoleDao().getRoleIdsToConvert();
+                factory.getRoleDao().copyRolesToDocAccessType(roleIds, factory.getProposalKimAttributeDocumentValueHandler());
+            }
+
+            if (options.containsIrb()) {
+                System.out.println("IRB Conversion not supported");
+            }
+
+            if (options.containsIacuc()) {
+                System.out.println("IACUC Conversion not supported");
+            }
+
+            if (options.containsDryRun()) {
+                coeusConnection.rollback();
+                riceConnection.rollback();
+            } else {
+                coeusConnection.commit();
+                riceConnection.commit();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

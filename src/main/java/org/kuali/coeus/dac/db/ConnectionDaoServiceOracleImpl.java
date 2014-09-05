@@ -1,6 +1,6 @@
-package org.kuali.coeus.dac.dao.impl;
+package org.kuali.coeus.dac.db;
 
-public class ConnectionServiceOracleImpl extends AbstractConnectionService {
+public class ConnectionDaoServiceOracleImpl extends AbstractConnectionDaoService {
 
     public static final String JDBC_DRIVER = "oracle.jdbc.OracleDriver";
 

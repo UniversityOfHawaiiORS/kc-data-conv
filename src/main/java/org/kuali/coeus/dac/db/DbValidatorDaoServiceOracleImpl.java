@@ -1,6 +1,6 @@
-package org.kuali.coeus.dac.dao.impl;
+package org.kuali.coeus.dac.db;
 
-public class DbValidatorServiceOracleImpl extends AbstractDbValidatorService {
+public class DbValidatorDaoServiceOracleImpl extends AbstractDbValidatorDaoService {
 
     public static final String VALIDATION_QUERY = "select 1 from dual";
 
