@@ -1,6 +1,6 @@
-package org.kuali.coeus.dac.dao.impl;
+package org.kuali.coeus.dac.db;
 
-public class ConnectionServiceMysqlImpl extends AbstractConnectionService {
+public class ConnectionDaoServiceMySqlImpl extends AbstractConnectionDaoService {
 
     public static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
