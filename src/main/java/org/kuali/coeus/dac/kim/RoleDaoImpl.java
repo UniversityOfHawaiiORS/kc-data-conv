@@ -5,13 +5,14 @@ import org.kuali.coeus.dac.db.ConnectionDaoService;
 import org.kuali.coeus.dac.db.SequenceDaoService;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
+import java.util.logging.Logger;
 
 import static org.kuali.coeus.dac.util.PreparedStatementUtils.*;
 
 public class RoleDaoImpl implements RoleDao {
+
+    private static final Logger LOG = Logger.getLogger(RoleDaoImpl.class.getName());
 
     private ConnectionDaoService connectionDaoService;
     private KimTypeDao kimTypeDao;
@@ -48,6 +49,7 @@ public class RoleDaoImpl implements RoleDao {
             }
         }
 
+        handler.cleanup();
     }
 
     protected boolean copyExists(String name, String namespace) {
@@ -76,18 +78,21 @@ public class RoleDaoImpl implements RoleDao {
                 Collection<RoleMemberAttributeData> attrs = getRoleMemberAttributeData(member.getId());
                 for (RoleMemberAttributeData attr : attrs) {
                     if (handler.isDocumentValueType(attr.getKimAttributeId())) {
-                        DocumentAccess access = new DocumentAccess();
-                        access.setId(sequenceDaoService.getNextCoeusSequence("SEQ_DOCUMENT_ACCESS_ID", ""));
-                        access.setDocumentNumber(handler.transform(attr.getAttributeValue()));
-                        access.setPrincipalId(member.getMemberId());
-                        access.setRoleName(createNewRoleName(existingRole.getName()));
-                        access.setNamespaceCode(existingRole.getNamespaceCode());
-                        access.setUpdateUser("kc-doc-access-conv");
-                        access.setUpdateTimestamp(new Timestamp(new java.util.Date().getTime()));
-                        access.setVersionNumber(1L);
-                        access.setObjectId(UUID.randomUUID().toString());
+                        String documentNumber = handler.transform(attr.getAttributeValue());
+                        if (documentNumber != null) {
+                            DocumentAccess access = new DocumentAccess();
+                            access.setId(sequenceDaoService.getNextCoeusSequence("SEQ_DOCUMENT_ACCESS_ID", ""));
+                            access.setDocumentNumber(documentNumber);
+                            access.setPrincipalId(member.getMemberId());
+                            access.setRoleName(createNewRoleName(existingRole.getName()));
+                            access.setNamespaceCode(existingRole.getNamespaceCode());
+                            access.setUpdateUser("kc-doc-access-conv");
+                            access.setUpdateTimestamp(new Timestamp(new java.util.Date().getTime()));
+                            access.setVersionNumber(1L);
+                            access.setObjectId(UUID.randomUUID().toString());
 
-                        accessesToSave.add(access);
+                            accessesToSave.add(access);
+                        }
 
                         attrsToDelete.add(attr.getId());
                     }
@@ -95,14 +100,33 @@ public class RoleDaoImpl implements RoleDao {
             }
         }
 
-        saveDocumentAccess(accessesToSave);
+        final Set<DocumentAccess> filtered = new TreeSet<>(new Comparator<DocumentAccess>(){
+            @Override
+            public int compare(DocumentAccess o1, DocumentAccess o2) {
+                if (o1.getPrincipalId().equals(o2.getPrincipalId())
+                        && o1.getDocumentNumber().equals(o2.getDocumentNumber())
+                        && o1.getRoleName().equals(o2.getRoleName())
+                        && o1.getNamespaceCode().equals(o2.getNamespaceCode())) {
+                    return 0;
+                } else {
+                    return o1.getDocumentNumber().compareTo(o2.getDocumentNumber());
+                }
+            }
+        });
+        filtered.addAll(accessesToSave);
+
+        if (filtered.size() != accessesToSave.size()) {
+            LOG.warning("Duplicate role member document qualifiers detected");
+        }
+
+        saveDocumentAccess(filtered);
         deleteAttributeData(attrsToDelete);
     }
 
     private void deleteAttributeData(Collection<String> attrsToDelete) {
         for (String attr: attrsToDelete) {
             Connection connection = connectionDaoService.getRiceConnection();
-            try (PreparedStatement stmt = setString(1, attr, connection.prepareStatement("DELETE FROM KRIM_ROLE_ATTR_DATA_T WHERE ATTR_DATA_ID = ?"))) {
+            try (PreparedStatement stmt = setString(1, attr, connection.prepareStatement("DELETE FROM KRIM_ROLE_MBR_ATTR_DATA_T WHERE ATTR_DATA_ID = ?"))) {
                 stmt.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -138,7 +162,7 @@ public class RoleDaoImpl implements RoleDao {
             final Collection<RoleMember> members = new ArrayList<RoleMember>();
             while(result.next()) {
                 RoleMember member = new RoleMember();
-                member.setMemberId(result.getString(1));
+                member.setId(result.getString(1));
                 member.setVersionNumber(result.getLong(2));
                 member.setObjectId(result.getString(3));
                 member.setRoleId(result.getString(4));

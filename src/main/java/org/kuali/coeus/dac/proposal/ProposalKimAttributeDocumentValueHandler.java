@@ -7,10 +7,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import static org.kuali.coeus.dac.util.PreparedStatementUtils.*;
 
 public class ProposalKimAttributeDocumentValueHandler implements KimAttributeDocumentValueHandler {
+
+    private static final Logger LOG = Logger.getLogger(ProposalKimAttributeDocumentValueHandler.class.getName());
 
     private ProposalKimAttributeDefnDao proposalKimAttributeDefnDao;
     private ConnectionDaoService connectionDaoService;
@@ -24,16 +27,22 @@ public class ProposalKimAttributeDocumentValueHandler implements KimAttributeDoc
             if (result.next()) {
                 return result.getString(1);
             } else {
-                throw new IllegalStateException("cannot find document number");
+                LOG.warning("cannot find document number for proposal: " + val);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     @Override
     public boolean isDocumentValueType(String attrDefnId) {
         return proposalKimAttributeDefnDao.getDocumentQualifierAttrDefnId().equals(attrDefnId);
+    }
+
+    @Override
+    public void cleanup() {
+        proposalKimAttributeDefnDao.deleteDocumentQualifierAttrDefn();
     }
 
     public ProposalKimAttributeDefnDao getProposalKimAttributeDefnDao() {

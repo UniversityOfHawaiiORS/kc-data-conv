@@ -11,19 +11,33 @@ import static org.kuali.coeus.dac.util.PreparedStatementUtils.*;
 
 public class KimAttributeDefnDaoImpl implements ProposalKimAttributeDefnDao {
 
+    public static final String KC_SYS = "KC-SYS";
+    public static final String PROPOSAL = "proposal";
+
     private ConnectionDaoService connectionDaoService;
 
     @Override
     public String getDocumentQualifierAttrDefnId() {
         Connection connection = connectionDaoService.getRiceConnection();
-        try (PreparedStatement stmt = setString(2, "KC-SYS",
-                                     setString(1, "proposal", connection.prepareStatement("SELECT KIM_ATTR_DEFN_ID FROM KRIM_ATTR_DEFN_T WHERE NM = ? AND NMSPC_CD = ?")));
+        try (PreparedStatement stmt = setString(2, KC_SYS,
+                                     setString(1, PROPOSAL, connection.prepareStatement("SELECT KIM_ATTR_DEFN_ID FROM KRIM_ATTR_DEFN_T WHERE NM = ? AND NMSPC_CD = ?")));
             ResultSet result = stmt.executeQuery()) {
             if (result.next()) {
                 return result.getString(1);
             } else {
                 throw new IllegalStateException("proposal attribute definition not found");
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteDocumentQualifierAttrDefn() {
+        Connection connection = connectionDaoService.getRiceConnection();
+        try (PreparedStatement stmt = setString(2, KC_SYS,
+                setString(1, PROPOSAL, connection.prepareStatement("DELETE FROM KRIM_ATTR_DEFN_T WHERE NM = ? AND NMSPC_CD = ?")))) {
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
