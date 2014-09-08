@@ -32,6 +32,7 @@ public class SequenceDaoServiceOracleImpl implements SequenceDaoService {
     protected String getNextSequence(String sequenceName, String prefix, Connection connection) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement("SELECT " + sequenceName + ".NEXTVAL FROM DUAL");
              ResultSet result = stmt.executeQuery()) {
+            result.next();
             return prefix + result.getString(1);
         }
     }
