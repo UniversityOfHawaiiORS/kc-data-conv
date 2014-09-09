@@ -81,14 +81,14 @@
             <groupId>${mysql.groupId}</groupId>
             <artifactId>${mysql.artifactId}</artifactId>
             <version>${mysql.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>${oracle.groupId}</groupId>
             <artifactId>${oracle.artifactId}</artifactId>
             <version>${oracle.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     
