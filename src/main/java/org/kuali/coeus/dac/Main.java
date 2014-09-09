@@ -15,6 +15,10 @@ import java.util.logging.Logger;
 
 /**
  * The main driver program that runs this conversion program.
+ *
+ * Example arguments:
+ *
+ * -debug -dbcoeuscon jdbc:mysql://localhost/kcbnd?user=kcbnd&password=bndpass -dbricecon jdbc:mysql://localhost/kcbnd?user=kcbnd&password=bndpass proposal
  */
 public final class Main {
 
