@@ -4,5 +4,5 @@ import java.util.Collection;
 
 public interface RoleDao {
 
-    void copyRolesToDocAccessType(Collection<String> roleIds, KimAttributeDocumentValueHandler handler);
+    void copyRoleMembersToDocAccessType(Collection<String> roleIds, KimAttributeDocumentValueHandler handler);
 }

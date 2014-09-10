@@ -74,7 +74,7 @@ public final class Main {
 
             if (options.containsProposal()) {
                 Collection<String> roleIds = factory.getProposalRoleDao().getRoleIdsToConvert();
-                factory.getRoleDao().copyRolesToDocAccessType(roleIds, factory.getProposalKimAttributeDocumentValueHandler());
+                factory.getRoleDao().copyRoleMembersToDocAccessType(roleIds, factory.getProposalKimAttributeDocumentValueHandler());
             }
 
             if (options.containsIrb()) {

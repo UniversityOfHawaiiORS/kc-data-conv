@@ -19,7 +19,7 @@ public class RoleDaoImpl implements RoleDao {
     private SequenceDaoService sequenceDaoService;
 
     @Override
-    public void copyRolesToDocAccessType(Collection<String> roleIds, KimAttributeDocumentValueHandler handler) {
+    public void copyRoleMembersToDocAccessType(Collection<String> roleIds, KimAttributeDocumentValueHandler handler) {
 
         final String kimTypeId = kimTypeDao.getDocAccessKimTypeId();
 
@@ -30,23 +30,8 @@ public class RoleDaoImpl implements RoleDao {
         for (String roleId : roleIds) {
             Role existingRole = getRole(roleId);
 
-            if (!existingRole.getKimTypeId().equals(kimTypeId) && !copyExists(createNewRoleName(existingRole.getName()), existingRole.getNamespaceCode())) {
-                Role copiedRole = new Role();
-                String newRoleId = sequenceDaoService.getNextRiceSequence("krim_role_id_s", "KC");
-                copiedRole.setId(newRoleId);
-                copiedRole.setName(createNewRoleName(existingRole.getName()));
-                copiedRole.setNamespaceCode(existingRole.getNamespaceCode());
-                copiedRole.setDescription(existingRole.getDescription());
-                copiedRole.setKimTypeId(kimTypeId);
-                copiedRole.setActive(existingRole.getActive());
-                copiedRole.setObjectId(UUID.randomUUID().toString());
-                copiedRole.setVersionNumber(1L);
-                copiedRole.setLastUpdatedDate(new Timestamp(new java.util.Date().getTime()));
-
-                saveRole(copiedRole);
-
-                copyRoleMembersToDocAccessType(existingRole, handler);
-                copyRolePermissionsToDocAccessType(roleId, newRoleId);
+            if (!existingRole.getKimTypeId().equals(kimTypeId) && copyExists(createNewRoleName(existingRole.getName()), existingRole.getNamespaceCode())) {
+                copyRoleMembers(existingRole, handler);
             }
         }
 
@@ -69,7 +54,7 @@ public class RoleDaoImpl implements RoleDao {
         return name + " Document Level";
     }
 
-    protected void copyRoleMembersToDocAccessType(Role existingRole, KimAttributeDocumentValueHandler handler) {
+    protected void copyRoleMembers(Role existingRole, KimAttributeDocumentValueHandler handler) {
 
         Collection<DocumentAccess> accessesToSave = new ArrayList<>();
         Collection<String> attrsToDelete = new ArrayList<>();
@@ -122,42 +107,6 @@ public class RoleDaoImpl implements RoleDao {
 
         saveDocumentAccess(filtered);
         deleteAttributeData(attrsToDelete);
-    }
-
-    protected void copyRolePermissionsToDocAccessType(String existingRoleId, String newRoleId) {
-        Collection<RolePermission> existingRolePermissions = new ArrayList<>();
-        Connection connection = connectionDaoService.getRiceConnection();
-        try (PreparedStatement stmt = setString(1, existingRoleId, connection.prepareStatement("SELECT ROLE_PERM_ID, OBJ_ID, VER_NBR, ROLE_ID, PERM_ID, ACTV_IND FROM KRIM_ROLE_PERM_T WHERE ROLE_ID = ?"));
-            ResultSet result = stmt.executeQuery()) {
-            while (result.next()) {
-
-                RolePermission existingRolePerm = new RolePermission();
-                existingRolePerm.setId(result.getString(1));
-                existingRolePerm.setObjectId(result.getString(2));
-                existingRolePerm.setVersionNumber(result.getLong(3));
-                existingRolePerm.setRoleId(result.getString(4));
-                existingRolePerm.setPermissionId(result.getString(5));
-                existingRolePerm.setActive(result.getString(6));
-
-                existingRolePermissions.add(existingRolePerm);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        for (RolePermission existingRolePerm : existingRolePermissions) {
-            try (PreparedStatement stmt =
-                        setString(6, existingRolePerm.getActive(),
-                        setString(5, existingRolePerm.getPermissionId(),
-                        setString(4, newRoleId,
-                        setLong(3, 1L,
-                        setString(2, UUID.randomUUID().toString(),
-                        setString(1, sequenceDaoService.getNextRiceSequence("KRIM_ROLE_PERM_ID_S", "KC"), connection.prepareStatement("INSERT INTO KRIM_ROLE_PERM_T (ROLE_PERM_ID, OBJ_ID, VER_NBR, ROLE_ID, PERM_ID, ACTV_IND) VALUES (?, ?, ?, ?, ?, ?)")))))))) {
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     private void deleteAttributeData(Collection<String> attrsToDelete) {
@@ -240,24 +189,6 @@ public class RoleDaoImpl implements RoleDao {
                 attrs.add(attr);
             }
             return attrs;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void saveRole(Role role) {
-        Connection connection = connectionDaoService.getRiceConnection();
-        try (PreparedStatement stmt =
-                                    setTimestamp(9, role.getLastUpdatedDate(),
-                                    setLong(8, role.getVersionNumber(),
-                                    setString(7, role.getObjectId(),
-                                    setString(6, role.getActive(),
-                                    setString(5, role.getKimTypeId(),
-                                    setString(4, role.getDescription(),
-                                    setString(3, role.getNamespaceCode(),
-                                    setString(2, role.getName(),
-                                    setString(1, role.getId(), connection.prepareStatement("INSERT INTO KRIM_ROLE_T (ROLE_ID, ROLE_NM, NMSPC_CD, DESC_TXT, KIM_TYP_ID, ACTV_IND, OBJ_ID, VER_NBR, LAST_UPDT_DT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"))))))))))) {
-            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
