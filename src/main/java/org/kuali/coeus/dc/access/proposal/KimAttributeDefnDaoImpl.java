@@ -43,6 +43,17 @@ public class KimAttributeDefnDaoImpl implements ProposalKimAttributeDefnDao {
         }
     }
 
+    @Override
+    public void inactivateDocumentQualifierAttrDefn() {
+        Connection connection = connectionDaoService.getRiceConnection();
+        try (PreparedStatement stmt = setString(2, KC_SYS,
+                setString(1, PROPOSAL, connection.prepareStatement("UPDATE KRIM_ATTR_DEFN_T SET ACTV_IND = 'F' WHERE NM = ? AND NMSPC_CD = ?")))) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ConnectionDaoService getConnectionDaoService() {
         return connectionDaoService;
     }

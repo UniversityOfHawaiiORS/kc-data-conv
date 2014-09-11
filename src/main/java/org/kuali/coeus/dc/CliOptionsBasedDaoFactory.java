@@ -74,7 +74,7 @@ public final class CliOptionsBasedDaoFactory {
         ProposalKimAttributeDocumentValueHandler handler = new ProposalKimAttributeDocumentValueHandler();
         handler.setProposalKimAttributeDefnDao(getProposalKimAttributeDefnDao());
         handler.setConnectionDaoService(getConnectionDaoService());
-
+        handler.setDelete(cliOptions.deleteCleanupPolicy());
         return handler;
     }
 

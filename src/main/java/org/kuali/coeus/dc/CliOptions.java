@@ -30,6 +30,10 @@ public class CliOptions {
             return true;
         }
 
+        if (valid && (inactivateCleanupPolicy() || deleteCleanupPolicy())) {
+            return true;
+        }
+
         return false;
     }
 
@@ -102,6 +106,21 @@ public class CliOptions {
         return "";
     }
 
+    public String getCleanupPolicy() {
+        if (contains("-cleanup")) {
+            return nextArg("-cleanup");
+        }
+        return "inactivate";
+    }
+
+    public boolean deleteCleanupPolicy() {
+        return getCleanupPolicy().equals("delete");
+    }
+
+    public boolean inactivateCleanupPolicy() {
+        return getCleanupPolicy().equals("inactivate");
+    }
+
     public boolean isMySql() {
         if (contains("-platform") && "MySql".equalsIgnoreCase(nextArg("-platform"))) {
             return true;
@@ -134,14 +153,17 @@ public class CliOptions {
                 + "  -dryrun                  executes conversion without writing out to the database\n"
                 + "  -validate                validates database connections only\n"
                 + "  -debug                   print debugging information\n"
+                + "  -cleanup <policy>        the policy used for data cleanup (delete|inactivate)\n"
                 + "  -dbplatform <platform>   the database platform (MySql|Oracle)\n"
                 + "  -dbricecon <connection>  the kuali rice jdbc database connection string (jdbc:mysql://localhost/rice?user=usr&password=pwd)\n"
                 + "  -dbcoeuscon <connection> the kuali coeus jdbc database connection string (jdbc:mysql://localhost/coeus?user=usr&password=pwd)\n"
                 + "\n"
                 + "If platform is not specified then the platform will be autodetected from the connection strings.\n"
                 + "\n"
-                + "The valid conversion targets are (proposal|irb|iacuc)\n"
+                + "The valid conversion targets are (proposal|irb|iacuc).\n"
                 + "\n"
-                + "The dryrun flag may still cause database sequences to increment";
+                + "The dryrun flag may still cause database sequences to increment.\n"
+                + "\n"
+                + "The cleanup flag when choosing inactivate will attempt to set the active flag to false when possible.  This is the default. ";
     }
 }

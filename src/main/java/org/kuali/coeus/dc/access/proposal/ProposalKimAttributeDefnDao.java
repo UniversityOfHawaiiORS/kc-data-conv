@@ -4,4 +4,5 @@ public interface ProposalKimAttributeDefnDao {
 
     String getDocumentQualifierAttrDefnId();
     void deleteDocumentQualifierAttrDefn();
+    void inactivateDocumentQualifierAttrDefn();
 }

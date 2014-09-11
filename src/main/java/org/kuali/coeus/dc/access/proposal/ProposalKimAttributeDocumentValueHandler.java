@@ -17,7 +17,7 @@ public class ProposalKimAttributeDocumentValueHandler implements KimAttributeDoc
 
     private ProposalKimAttributeDefnDao proposalKimAttributeDefnDao;
     private ConnectionDaoService connectionDaoService;
-
+    private boolean delete;
 
     @Override
     public String transform(String val) {
@@ -42,7 +42,11 @@ public class ProposalKimAttributeDocumentValueHandler implements KimAttributeDoc
 
     @Override
     public void cleanup() {
-        proposalKimAttributeDefnDao.deleteDocumentQualifierAttrDefn();
+        if (delete) {
+            proposalKimAttributeDefnDao.deleteDocumentQualifierAttrDefn();
+        } else {
+            proposalKimAttributeDefnDao.inactivateDocumentQualifierAttrDefn();
+        }
     }
 
     public ProposalKimAttributeDefnDao getProposalKimAttributeDefnDao() {
@@ -59,5 +63,13 @@ public class ProposalKimAttributeDocumentValueHandler implements KimAttributeDoc
 
     public void setConnectionDaoService(ConnectionDaoService connectionDaoService) {
         this.connectionDaoService = connectionDaoService;
+    }
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 }
