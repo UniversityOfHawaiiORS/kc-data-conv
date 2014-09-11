@@ -24,7 +24,7 @@
         <version>4.3.5</version>
     </parent>
     <groupId>org.kuali.coeus</groupId>
-    <artifactId>coeus-doc-access-conv</artifactId>
+    <artifactId>coeus-data-conv</artifactId>
     <version>6.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>
@@ -33,9 +33,9 @@
     <url>http://${kuali.site.hostname}/coeus/coeus-doc-access-conv/${project.version}</url>
     <inceptionYear>2014</inceptionYear>
     <scm>
-        <connection>scm:git:https://github.com/kuali/kc-doc-access-conv.git</connection>
-        <developerConnection>scm:git:https://github.com/kuali/kc-doc-access-conv.git</developerConnection>
-        <url>https://github.com/kuali/kc-doc-access-conv/tree/${project.scm.tag}</url>
+        <connection>scm:git:https://github.com/kuali/kc-data-conv.git</connection>
+        <developerConnection>scm:git:https://github.com/kuali/kc-data-conv.git</developerConnection>
+        <url>https://github.com/kuali/kc-data-conv/tree/${project.scm.tag}</url>
         <tag>master</tag>
     </scm>
     <developers>
