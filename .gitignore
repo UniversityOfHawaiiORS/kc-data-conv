@@ -3,7 +3,7 @@
 **/.settings
 **/target
 **/.idea
-**/coeus-doc-access-conv.iml
+**/coeus-data-conv.iml
 **/.DS_Store
 **/Thumbs.db
 bin
@@ -12,5 +12,5 @@ bin
 .settings
 target
 .idea
-coeus-doc-access-conv.iml
+coeus-data-conv.iml
 **/bin
