@@ -127,7 +127,7 @@ public class CliOptions {
     }
 
     public String getCliHelpString() {
-        return "coeus-doc-access-conv [options] [conv_target [conv_target2 [conv_target3] ...]]\n"
+        return "coeus-data-conv [options] [conv_target [conv_target2 [conv_target3] ...]]\n"
                 + "  Options:\n"
                 + "  -help                    print this message\n"
                 + "  -version                 print the version information and exit\n"
