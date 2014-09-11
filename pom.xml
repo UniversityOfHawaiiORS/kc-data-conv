@@ -30,7 +30,7 @@
     <description>
         The Kuali Coeus Data Conversion module is a program to aid in the conversion of data from one version of kuali coeus to another.
     </description>
-    <url>http://${kuali.site.hostname}/coeus/coeus-doc-access-conv/${project.version}</url>
+    <url>http://${kuali.site.hostname}/coeus/coeus-data-conv/${project.version}</url>
     <inceptionYear>2014</inceptionYear>
     <scm>
         <connection>scm:git:https://github.com/kuali/kc-data-conv.git</connection>
