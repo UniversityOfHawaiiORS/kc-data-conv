@@ -54,6 +54,36 @@ public class KimAttributeDefnDaoImpl implements ProposalKimAttributeDefnDao {
         }
     }
 
+    @Override
+    public boolean isDocumentQualifierAttrDefnUsed() {
+        final String defnId = getDocumentQualifierAttrDefnId();
+
+        Connection connection = connectionDaoService.getRiceConnection();
+        try (PreparedStatement stmt =
+                    setString(6, defnId,
+                    setString(5, defnId,
+                    setString(4, defnId,
+                    setString(3, defnId,
+                    setString(2, defnId,
+                    setString(1, defnId, connection.prepareStatement(
+                "SELECT count(*) FROM krim_dlgn_mbr_attr_data_t WHERE KIM_ATTR_DEFN_ID = ? UNION " +
+                "SELECT count(*) FROM krim_grp_attr_data_t WHERE KIM_ATTR_DEFN_ID = ? UNION " +
+                "SELECT count(*) FROM krim_perm_attr_data_t WHERE KIM_ATTR_DEFN_ID = ? UNION " +
+                "SELECT count(*) FROM krim_role_mbr_attr_data_t WHERE KIM_ATTR_DEFN_ID = ? UNION " +
+                "SELECT count(*) FROM krim_rsp_attr_data_t WHERE KIM_ATTR_DEFN_ID = ? UNION " +
+                "SELECT count(*) FROM krim_typ_attr_t WHERE KIM_ATTR_DEFN_ID = ?")))))));
+             ResultSet result = stmt.executeQuery()) {
+            while (result.next()) {
+                if (result.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
     public ConnectionDaoService getConnectionDaoService() {
         return connectionDaoService;
     }

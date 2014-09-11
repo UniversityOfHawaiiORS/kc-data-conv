@@ -42,10 +42,15 @@ public class ProposalKimAttributeDocumentValueHandler implements KimAttributeDoc
 
     @Override
     public void cleanup() {
-        if (delete) {
-            proposalKimAttributeDefnDao.deleteDocumentQualifierAttrDefn();
+        if (!proposalKimAttributeDefnDao.isDocumentQualifierAttrDefnUsed()) {
+            if (delete) {
+                    proposalKimAttributeDefnDao.deleteDocumentQualifierAttrDefn();
+            } else {
+                proposalKimAttributeDefnDao.inactivateDocumentQualifierAttrDefn();
+            }
         } else {
-            proposalKimAttributeDefnDao.inactivateDocumentQualifierAttrDefn();
+            LOG.warning("Proposal Attribute Definition is still used.  It cannot be "
+                    + (delete ? "deleted" : "inactivated") + ".");
         }
     }
 

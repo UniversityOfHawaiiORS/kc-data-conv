@@ -44,7 +44,14 @@ public class RoleDaoImpl implements RoleDao {
         try (PreparedStatement stmt = setString(2, namespace, setString(1, name, connection.prepareStatement("SELECT count(*) from KRIM_ROLE_T WHERE ROLE_NM = ? AND NMSPC_CD = ?")));
             ResultSet result = stmt.executeQuery()) {
             result.next();
-            return result.getInt(1) > 0;
+            final boolean exists =  result.getInt(1) > 0;
+            if (exists) {
+                return true;
+            } else {
+                LOG.warning("Copy Role does not exist for name: " + name + " and namespace: " + namespace);
+                return false;
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
