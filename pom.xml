@@ -63,7 +63,7 @@
 
         <oracle.groupId>com.oracle</oracle.groupId>
         <oracle.artifactId>ojdbc6</oracle.artifactId>
-        <oracle.version>10.2.0.3.0</oracle.version>
+        <oracle.version>11.2.0.3</oracle.version>
 
         <error_prone_core.version>1.1.2</error_prone_core.version>
         <plexus-compiler-javac.version>2.3</plexus-compiler-javac.version>
