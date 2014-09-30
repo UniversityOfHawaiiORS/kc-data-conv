@@ -106,6 +106,30 @@ public class CliOptions {
         return "";
     }
 
+    public String getCoeusUser() {
+        if (contains("-dbcoeususer")) {
+            return nextArg("-dbcoeususer");
+        }
+        return "";
+    }
+    public String getCoeusPassword() {
+        if (contains("-dbcoeuspwd")) {
+            return nextArg("-dbcoeuspwd");
+        }
+        return "";
+    }
+    public String getRiceUser() {
+        if (contains("-dbriceuser")) {
+            return nextArg("-dbriceuser");
+        }
+        return "";
+    }
+    public String getRicePassword() {
+        if (contains("-dbricepwd")) {
+            return nextArg("-dbricepwd");
+        }
+        return "";
+    }
     public String getCleanupPolicy() {
         if (contains("-cleanup")) {
             return nextArg("-cleanup");
@@ -157,6 +181,10 @@ public class CliOptions {
                 + "  -dbplatform <platform>   the database platform (MySql|Oracle)\n"
                 + "  -dbricecon <connection>  the kuali rice jdbc database connection string (jdbc:mysql://localhost/rice?user=usr&password=pwd)\n"
                 + "  -dbcoeuscon <connection> the kuali coeus jdbc database connection string (jdbc:mysql://localhost/coeus?user=usr&password=pwd)\n"
+                + "  -dbriceuser <ricedbuser>  the kuali rice database user\n"
+                + "  -dbricepwd <ricerbpassword> the kuali rice database password\n"
+                + "  -dbcoeususer <coeususer>  the kuali coeus database user\n"
+                + "  -dbcoeuspwd <coeuspassword> the kuali coeus database password\n"
                 + "\n"
                 + "If platform is not specified then the platform will be autodetected from the connection strings.\n"
                 + "\n"
@@ -166,4 +194,5 @@ public class CliOptions {
                 + "\n"
                 + "The cleanup flag when choosing inactivate will attempt to set the active flag to false when possible.  This is the default. ";
     }
+
 }

@@ -6,6 +6,10 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
 
     private String riceConnectionString;
     private String coeusConnectionString;
+    private String riceUser;
+    private String coeusUser;
+    private String ricePassword;
+    private String coeusPassword;
 
     private static final ThreadLocal<Connection> COEUS_CONNECTIONS = new ThreadLocal<>();
     private static final ThreadLocal<Connection> RICE_CONNECTIONS = new ThreadLocal<>();
@@ -26,9 +30,10 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
         Connection c = COEUS_CONNECTIONS.get();
         if (c == null) {
             try {
-                c =  DriverManager.getConnection(getCoeusConnectionString());
+                c =  DriverManager.getConnection(getCoeusConnectionString(),getCoeusUser(),getCoeusPassword());
                 c.setAutoCommit(false);
             } catch (SQLException e) {
+            	e.printStackTrace();
                 throw new RuntimeException(e);
             }
 
@@ -38,12 +43,12 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
         return c;
     }
 
-    @Override
+	@Override
     public Connection getRiceConnection() {
         Connection c = RICE_CONNECTIONS.get();
         if (c == null) {
             try {
-                c =  DriverManager.getConnection(getRiceConnectionString());
+                c =  DriverManager.getConnection(getRiceConnectionString(),getRiceUser(),getRicePassword());
                 c.setAutoCommit(false);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -55,7 +60,7 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
         return c;
     }
 
-    public String getRiceConnectionString() {
+	public String getRiceConnectionString() {
         return riceConnectionString;
     }
 
@@ -70,4 +75,31 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
     public void setCoeusConnectionString(String coeusConnectionString) {
         this.coeusConnectionString = coeusConnectionString;
     }
+
+    private String getRiceUser() {
+		return riceUser;
+	}
+
+	public void setRiceUser(String riceUser) {
+		this.riceUser = riceUser;
+	}
+
+	private String getCoeusUser() {
+		return coeusUser;
+	}
+	public void setCoeusUser(String coeusUser) {
+		this.coeusUser = coeusUser;
+	}
+	private String getRicePassword() {
+		return ricePassword;
+	}
+	public void setRicePassword(String ricePassword) {
+		this.ricePassword = ricePassword;
+	}
+    private String getCoeusPassword() {
+		return coeusPassword;
+	}
+	public void setCoeusPassword(String coeusPassword) {
+		this.coeusPassword = coeusPassword;
+	}
 }
