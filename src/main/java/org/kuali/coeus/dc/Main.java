@@ -25,7 +25,7 @@ public final class Main {
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        initLogging("/org/kuali/coeus/dac/jul-default.properties");
+        initLogging("/org/kuali/coeus/dc/jul-default.properties");
 
         CliOptions options = new CliOptions(args);
 
@@ -35,7 +35,7 @@ public final class Main {
         }
 
         if (options.containsDebug()) {
-            initLogging("/org/kuali/coeus/dac/jul-debug.properties");
+            initLogging("/org/kuali/coeus/dc/jul-debug.properties");
         }
 
         if (options.containsHelp()) {

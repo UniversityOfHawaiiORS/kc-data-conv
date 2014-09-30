@@ -26,11 +26,19 @@ public final class CliOptionsBasedDaoFactory {
             ConnectionDaoServiceMySqlImpl connectionService = new ConnectionDaoServiceMySqlImpl();
             connectionService.setCoeusConnectionString(cliOptions.getCoeusConnectionString());
             connectionService.setRiceConnectionString(cliOptions.getRiceConnectionString());
+            connectionService.setCoeusUser(cliOptions.getCoeusUser());
+            connectionService.setRiceUser(cliOptions.getRiceUser());
+            connectionService.setCoeusPassword(cliOptions.getCoeusPassword());
+            connectionService.setRicePassword(cliOptions.getRicePassword());
             return connectionService;
         } else if(cliOptions.isOracle()) {
             ConnectionDaoServiceOracleImpl connectionService = new ConnectionDaoServiceOracleImpl();
             connectionService.setCoeusConnectionString(cliOptions.getCoeusConnectionString());
             connectionService.setRiceConnectionString(cliOptions.getRiceConnectionString());
+            connectionService.setCoeusUser(cliOptions.getCoeusUser());
+            connectionService.setRiceUser(cliOptions.getRiceUser());
+            connectionService.setCoeusPassword(cliOptions.getCoeusPassword());
+            connectionService.setRicePassword(cliOptions.getRicePassword());
             return connectionService;
         }
         return null;
