@@ -65,11 +65,33 @@
         <oracle.artifactId>ojdbc6</oracle.artifactId>
         <oracle.version>11.2.0.3</oracle.version>
 
+        <db.groupId>${mysql.groupId}</db.groupId>
+        <db.artifactId>${mysql.artifactId}</db.artifactId>
+        <db.version>${mysql.version}</db.version>
+
         <error_prone_core.version>1.1.2</error_prone_core.version>
         <plexus-compiler-javac.version>2.3</plexus-compiler-javac.version>
         <plexus-compiler-javac-errorprone.version>2.3</plexus-compiler-javac-errorprone.version>
     </properties>
-    
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${plugin.jar.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>org.kuali.coeus.dc.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
 
         <!--
@@ -78,21 +100,24 @@
         -->
 
         <dependency>
-            <groupId>${mysql.groupId}</groupId>
-            <artifactId>${mysql.artifactId}</artifactId>
-            <version>${mysql.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>${oracle.groupId}</groupId>
-            <artifactId>${oracle.artifactId}</artifactId>
-            <version>${oracle.version}</version>
-            <scope>provided</scope>
+            <groupId>${db.groupId}</groupId>
+            <artifactId>${db.artifactId}</artifactId>
+            <version>${db.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
     
     <profiles>
+        <profile>
+            <id>oracle</id>
+            <properties>
+                <db.groupId>${oracle.groupId}</db.groupId>
+                <db.artifactId>${oracle.artifactId}</db.artifactId>
+                <db.version>${oracle.version}</db.version>
+                <scope>runtime</scope>
+            </properties>
+        </profile>
+
         <!-- enables the error prone compiler for strict compilation-->
         <profile>
             <id>error-prone</id>
