@@ -72,6 +72,10 @@ public final class Main {
         try (Connection coeusConnection = factory.getConnectionDaoService().getCoeusConnection();
             Connection riceConnection = factory.getConnectionDaoService().getRiceConnection()) {
 
+            if(options.containsProposalPersonRole()) {
+                factory.getProposalPersonRoleDao().convertParameterValues();
+            }
+
             if (options.containsProposal()) {
                 Collection<String> roleIds = factory.getProposalRoleDao().getRoleIdsToConvert();
                 factory.getRoleDao().copyRoleMembersToDocAccessType(roleIds, factory.getProposalKimAttributeDocumentValueHandler());

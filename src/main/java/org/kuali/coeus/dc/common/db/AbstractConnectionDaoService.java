@@ -30,7 +30,7 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
         Connection c = COEUS_CONNECTIONS.get();
         if (c == null) {
             try {
-                c =  DriverManager.getConnection(getCoeusConnectionString(),getCoeusUser(),getCoeusPassword());
+                c = getConnection(getCoeusConnectionString(), getCoeusUser(), getCoeusPassword());
                 c.setAutoCommit(false);
             } catch (SQLException e) {
             	e.printStackTrace();
@@ -48,7 +48,7 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
         Connection c = RICE_CONNECTIONS.get();
         if (c == null) {
             try {
-                c =  DriverManager.getConnection(getRiceConnectionString(),getRiceUser(),getRicePassword());
+                c = getConnection(getRiceConnectionString(),getRiceUser(),getRicePassword());
                 c.setAutoCommit(false);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -58,6 +58,14 @@ public abstract class AbstractConnectionDaoService implements ConnectionDaoServi
         }
 
         return c;
+    }
+
+    private Connection getConnection(String con, String user, String pass) throws SQLException {
+        if (user != null && !user.trim().equals("")) {
+            return DriverManager.getConnection(con, user, pass);
+        } else {
+            return DriverManager.getConnection(con);
+        }
     }
 
 	public String getRiceConnectionString() {
