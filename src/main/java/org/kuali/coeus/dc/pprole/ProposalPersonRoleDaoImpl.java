@@ -89,45 +89,30 @@ public class ProposalPersonRoleDaoImpl implements ProposalPersonRoleDao {
 
             if (roles.contains("COI")) {
                 updateProposalPersonRoleToReadOnly("COI", DEFAULT, true);
+                updateProposalPersonRoleToReadOnly("MPI", NIH_MULTIPLE_PI, true);
+                updateProposalPersonRoleToReadOnly("COI", NIH_MULTIPLE_PI, true);
             } else {
                 updateProposalPersonRoleToReadOnly("COI", DEFAULT, false);
+                updateProposalPersonRoleToReadOnly("MPI", NIH_MULTIPLE_PI, false);
+                updateProposalPersonRoleToReadOnly("COI", NIH_MULTIPLE_PI, false);
             }
 
             if (roles.contains("KP")) {
                 updateProposalPersonRoleToReadOnly("KP", DEFAULT, true);
+                updateProposalPersonRoleToReadOnly("KP", NIH_MULTIPLE_PI, true);
             } else {
                 updateProposalPersonRoleToReadOnly("KP", DEFAULT, false);
+                updateProposalPersonRoleToReadOnly("KP", NIH_MULTIPLE_PI, false);
             }
 
             if (roles.contains("PI")) {
                 updateProposalPersonRoleToReadOnly("PI", DEFAULT, true);
-            } else {
-                updateProposalPersonRoleToReadOnly("PI", DEFAULT, false);
-            }
-
-            if (roles.contains("NIH.PI")) {
                 updateProposalPersonRoleToReadOnly("PI", NIH_MULTIPLE_PI, true);
             } else {
+                updateProposalPersonRoleToReadOnly("PI", DEFAULT, false);
                 updateProposalPersonRoleToReadOnly("PI", NIH_MULTIPLE_PI, false);
             }
 
-            if (roles.contains("NIH.COI.MPI")) {
-                updateProposalPersonRoleToReadOnly("MPI", NIH_MULTIPLE_PI, true);
-            } else {
-                updateProposalPersonRoleToReadOnly("MPI", NIH_MULTIPLE_PI, false);
-            }
-
-            if (roles.contains("NIH.COI")) {
-                updateProposalPersonRoleToReadOnly("COI", NIH_MULTIPLE_PI, true);
-            } else {
-                updateProposalPersonRoleToReadOnly("COI", NIH_MULTIPLE_PI, false);
-            }
-
-            if (roles.contains("NIH.KP")) {
-                updateProposalPersonRoleToReadOnly("KP", NIH_MULTIPLE_PI, true);
-            } else {
-                updateProposalPersonRoleToReadOnly("KP", NIH_MULTIPLE_PI, false);
-            }
             deleteParameter(READ_ONLY_ROLES);
         }
 
