@@ -18,6 +18,10 @@ public class CliOptions {
             return true;
         }
 
+        if (valid && (containsProposalPersonRole() && !"".equals(getCoeusConnectionString()) && !"".equals(getRiceConnectionString()))) {
+            return true;
+        }
+
         if (valid && (containsProposal() && !"".equals(getCoeusConnectionString()) && !"".equals(getRiceConnectionString()))) {
             return true;
         }
@@ -55,6 +59,10 @@ public class CliOptions {
 
     public boolean containsValidate() {
         return contains("-validate");
+    }
+
+    public boolean containsProposalPersonRole() {
+        return contains("pprole");
     }
 
     public boolean containsProposal() {
@@ -188,7 +196,7 @@ public class CliOptions {
                 + "\n"
                 + "If platform is not specified then the platform will be autodetected from the connection strings.\n"
                 + "\n"
-                + "The valid conversion targets are (proposal|irb|iacuc).\n"
+                + "The valid conversion targets are (proposal|irb|iacuc|pprole).\n"
                 + "\n"
                 + "The dryrun flag may still cause database sequences to increment.\n"
                 + "\n"

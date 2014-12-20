@@ -1,8 +1,12 @@
 package org.kuali.coeus.dc;
 
 import org.kuali.coeus.dc.access.kim.*;
+import org.kuali.coeus.dc.common.rice.parameter.ParameterDao;
+import org.kuali.coeus.dc.common.rice.parameter.ParameterDaoImpl;
 import org.kuali.coeus.dc.access.proposal.*;
 import org.kuali.coeus.dc.common.db.*;
+import org.kuali.coeus.dc.pprole.ProposalPersonRoleDao;
+import org.kuali.coeus.dc.pprole.ProposalPersonRoleDaoImpl;
 
 public final class CliOptionsBasedDaoFactory {
 
@@ -90,6 +94,19 @@ public final class CliOptionsBasedDaoFactory {
         ProposalRoleDaoImpl rs = new ProposalRoleDaoImpl();
         rs.setConnectionDaoService(getConnectionDaoService());
         return rs;
+    }
+
+    public ParameterDao getParameterDao() {
+        ParameterDaoImpl ps = new ParameterDaoImpl();
+        ps.setConnectionDaoService(getConnectionDaoService());
+        return ps;
+    }
+
+    public ProposalPersonRoleDao getProposalPersonRoleDao() {
+        ProposalPersonRoleDaoImpl ps = new ProposalPersonRoleDaoImpl();
+        ps.setConnectionDaoService(getConnectionDaoService());
+        ps.setParameterDao(getParameterDao());
+        return ps;
     }
 
     public CliOptions getCliOptions() {
