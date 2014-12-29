@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -44,7 +46,17 @@ public final class Main {
         }
 
         if (options.containsVersion()) {
-            System.out.println("6.0-SNAPSHOT");
+            Properties buildProperties = new Properties();
+            try(InputStream stream = Main.class.getResourceAsStream("/META-INF/org/kuali/coeus/coeus-data-conv/project.properties")) {
+                if (stream != null) {
+                    buildProperties.load(stream);
+                }
+            } catch (IOException e) {
+                LOG.log(Level.WARNING, e.getMessage(), e);
+            }
+            final String version = buildProperties.getProperty("project.version");
+
+            System.out.println(version != null && !version.trim().equals("") ? version : "UNKNOWN");
             return;
         }
 
