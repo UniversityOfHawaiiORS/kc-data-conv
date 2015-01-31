@@ -34,8 +34,8 @@
     <url>http://${kuali.site.hostname}/coeus/coeus-data-conv/${project.version}</url>
     <inceptionYear>2014</inceptionYear>
     <scm>
-        <connection>scm:git:https://github.com/kuali/kc-data-conv.git</connection>
-        <developerConnection>scm:git:https://github.com/kuali/kc-data-conv.git</developerConnection>
+        <connection>scm:git:git@github.com:kuali/kc-data-conv.git</connection>
+        <developerConnection>scm:git:git@github.com:kuali/kc-data-conv.git</developerConnection>
         <url>https://github.com/kuali/kc-data-conv/tree/${project.scm.tag}</url>
         <tag>master</tag>
     </scm>
