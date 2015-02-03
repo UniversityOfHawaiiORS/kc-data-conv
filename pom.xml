@@ -26,7 +26,7 @@
     </parent>
     <groupId>org.kuali.coeus</groupId>
     <artifactId>coeus-data-conv</artifactId>
-    <version>6.0.0</version>
+    <version>6.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>
         The Kuali Coeus Data Conversion module is a program to aid in the conversion of data from one version of kuali coeus to another.
@@ -37,7 +37,7 @@
         <connection>scm:git:git@github.com:kuali/kc-data-conv.git</connection>
         <developerConnection>scm:git:git@github.com:kuali/kc-data-conv.git</developerConnection>
         <url>https://github.com/kuali/kc-data-conv/tree/${project.scm.tag}</url>
-        <tag>coeus-data-conv-6.0.0</tag>
+        <tag>master</tag>
     </scm>
     <licenses>
         <license>
